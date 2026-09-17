@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NewEra｜用户中心</title>
+<script src="https://cdn.jsdelivr.net/npm/web3@4.8.0/dist/web3.min.js"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Roboto,system-ui,sans-serif;
+}
+:root{
+    --era-blue:#00b8ff;
+    --era-purple:#924cff;
+    --era-green:#66e8c0;
+    --era-yellow:#ffc460;
+    --main-gradient:linear-gradient(90deg,#00b8ff,#924cff);
+    --bg-dark:#050510;
+    --card-bg:rgba(20,20,40,0.7);
+    --text-light:#e8edff;
+}
+body{
+    background-color:var(--bg-dark);
+    color:var(--text-light);
+    min-height:100vh;
+}
+.main-wrap-user{
+    max-width:900px;
+    margin:30px auto;
+    padding:0 20px;
+}
+.back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 18px;
+    background:rgba(0,184,255,0.12);
+    border:1px solid rgba(0,184,255,0.3);
+    border-radius:8px;
+    color:var(--era-blue);
+    cursor:pointer;
+    margin-bottom:30px;
+    transition:0.3s;
+}
+.back-btn:hover{
+    background:rgba(0,184,255,0.25);
+}
+.page-title{
+    text-align:center;
+    font-size:36px;
+    background:var(--main-gradient);
+    -webkit-background-clip:text;
+    color:transparent;
+    margin-bottom:32px;
+    font-weight:700;
+}
+.user-card{
+    background:var(--card-bg);
+    border:1px solid rgba(0,184,255,0.25);
+    border-radius:16px;
+    padding:28px;
+    margin-bottom:24px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 0 18px rgba(0, 184, 255, 0.35);
+}
+.user-card h2{
+    margin-bottom:16px;
+    color:var(--era-blue);
+}
+.user-item{
+    display:flex;
+    justify-content:space-between;
+    padding:12px 0;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.user-item:last-child{
+    border-bottom:none;
+}
+.label{
+    opacity:0.75;
+}
+.value{
+    font-weight:600;
+    word-break:break-all;
+}
+.team-card{
+    background:var(--card-bg);
+    border:1px solid rgba(146,76,255,0.25);
+    border-radius:16px;
+    padding:26px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 0 18px rgba(146,76,255,0.25);
+}
+.team-card h2{
+    margin-bottom:16px;
+    color:var(--era-purple);
+}
+.team-item{
+    padding:10px 0;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.team-item:last-child{
+    border-bottom:none;
+}
+.empty-tip{
+    text-align:center;
+    padding:20px 0;
+    opacity:0.6;
+}
+@media(max-width:600px){
+    .page-title{
+        font-size:26px;
+    }
+    .user-card,.team-card{
+        padding:20px;
+    }
+}
+</style>
+</head>
+<body>
+<header class="header-bar">
+    <div class="logo-wrap" onclick="location.href='index.html'">
+        <img src="logo.png" alt="Logo" class="logo-img">
+        <div class="logo-text">NewEra</div>
+    </div>
+    <div class="header-right">
+        <div class="wallet-box" id="walletBtn">连接钱包</div>
+        <div class="menu-trigger" id="menuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</header>
+
+<div class="side-nav" id="sideMenu">
+    <h3>导航菜单</h3>
+    <div class="nav-item" onclick="location.href='index.html'">🏠首页</div>
+
+    <div class="nav-item" onclick="toggleFundMenu()">
+        🏛️基金会
+        <span id="fundArrow">▼</span>
+    </div>
+    <div class="sub-nav-wrap" id="fundSubMenu">
+        <div class="sub-nav-item" onclick="location.href='pool1.html'">一号基金会</div>
+        <div class="sub-nav-item" onclick="location.href='pool2.html'">二号基金会</div>
+        <div class="sub-nav-item" onclick="location.href='pool3.html'">三号基金会</div>
+    </div>
+
+    <div class="nav-item" onclick="location.href='pool5.html'">🚀公平发射</div>
+    <div class="nav-item" onclick="location.href='pool6.html'">🎁空投</div>
+    <div class="nav-item" onclick="location.href='pool4.html'">⚡闪兑交易</div>
+    <div class="nav-item" onclick="location.href='pool5.html'">📈质押生息</div>
+    <div class="nav-item" onclick="location.href='pool6.html'">📃 借贷合约</div>
+    <div class="nav-item" onclick="location.href='user.html'">👤用户中心</div>
+    <div class="nav-item" onclick="location.href='rule.html'">📜代币发行与获取规则</div>
+    <div class="nav-item" onclick="location.href='share.html'">📤我的推广链接</div>
+</div>
+<div class="mask-overlay" id="maskOverlay"></div>
+
+<div class="main-wrap-user">
+    <div class="back-btn" onclick="history.back()">← 返回上一页</div>
+    <h1 class="page-title">用户中心</h1>
+
+    <div class="user-card">
+        <h2>钱包信息</h2>
+        <div class="user-item">
+            <span class="label">钱包地址</span>
+            <span class="value" id="userWallet">未连接钱包</span>
+        </div>
+        <div class="user-item">
+            <span class="label">上级推荐人</span>
+            <span class="value" id="userSuperior">无</span>
+        </div>
+    </div>
+
+    <div class="team-card">
+        <h2>我的直推团队</h2>
+        <div id="teamList">
+            <div class="empty-tip">暂无直推用户</div>
+        </div>
+    </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+const userWalletEl = document.getElementById('userWallet');
+const userSuperiorEl = document.getElementById('userSuperior');
+const teamListEl = document.getElementById('teamList');
+
+function renderUserInfo(){
+    if(!currentAccount){
+        userWalletEl.innerText = "未连接钱包";
+        userSuperiorEl.innerText = "无";
+        teamListEl.innerHTML = '<div class="empty-tip">暂无直推用户</div>';
+        return;
+    }
+    userWalletEl.innerText = currentAccount;
+    const myData = getRefData(currentAccount);
+    if(myData.superior){
+        userSuperiorEl.innerText = myData.superior;
+    }else{
+        userSuperiorEl.innerText = "无上级，自主入驻";
+    }
+    if(myData.team && myData.team.length>0){
+        let html = '';
+        myData.team.forEach(addr=>{
+            html += `<div class="team-item">${addr}</div>`;
+        });
+        teamListEl.innerHTML = html;
+    }else{
+        teamListEl.innerHTML = '<div class="empty-tip">暂无直推用户</div>';
+    }
+}
+
+window.addEventListener("walletConnected",renderUserInfo);
+window.addEventListener("walletDisconnected",renderUserInfo);
+window.addEventListener("accountsChanged",renderUserInfo);
+window.addEventListener('DOMContentLoaded',renderUserInfo);
+</script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/web3@4.8.0/dist/web3.min.js"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Roboto,system-ui,sans-serif;
+}
+:root{
+    --era-blue:#00b8ff;
+    --main-gradient:linear-gradient(90deg,#00b8ff,#924cff);
+    --bg-dark:#050510;
+    --card-bg:rgba(20,20,40,0.7);
+    --text-light:#e8edff;
+}
+body{
+    background-color:var(--bg-dark);
+    color:var(--text-light);
+    min-height:100vh;
+}
+.main-wrap-rank{
+    max-width:1000px;
+    margin:30px auto;
+    padding:0 20px;
+}
+.back-link{
+    display:inline-block;
+    margin-bottom:16px;
+    color:#7fdfff;
+    text-shadow: 0 0 8px rgba(0, 184, 255, 0.6);
+    cursor:pointer;
+}
+.page-title{
+    text-align:center;
+    font-size:32px;
+    margin-bottom:28px;
+    font-weight:700;
+}
+.page-title .icon-emoji{
+    font-size:34px;
+    margin-right:8px;
+}
+.page-title .gradient-text{
+    background:var(--main-gradient);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+.rank-card{
+    background:var(--card-bg);
+    border:1px solid rgba(0,184,255,0.45);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 0 18px rgba(0, 184, 255, 0.28);
+    position:relative;
+    overflow:hidden;
+}
+.rank-card::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:1px;
+    background:linear-gradient(90deg,transparent,#00d4ff,transparent);
+    box-shadow:0 0 10px rgba(0,212,255,0.8);
+}
+.rank-card h2{
+    font-size:22px;
+    color:#7fdfff;
+    margin-bottom:18px;
+    text-shadow:0 0 8px rgba(0,184,255,0.6);
+}
+.rank-table-wrap{
+    width:100%;
+    overflow-x:auto;
+}
+.rank-table{
+    width:100%;
+    border-collapse: collapse;
+    min-width:600px;
+}
+.rank-table th{
+    text-align:left;
+    padding:12px 10px;
+    color:#00d4ff;
+    border-bottom:1px solid rgba(0,184,255,0.25);
+}
+.rank-table td{
+    padding:12px 10px;
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    color:#c8d8ee;
+}
+.rank-table tr.my-row{
+    background:rgba(0,184,255,0.18);
+}
+.rank-num{
+    font-weight:bold;
+}
+.rank-num.no1{color:#ffd86b;text-shadow:0 0 6px #ffd86b;}
+.rank-num.no2{color:#cccccc;text-shadow:0 0 4px #cccccc;}
+.rank-num.no3{color:#ffa066;text-shadow:0 0 6px #ffa066;}
+@media(max-width:600px){
+    .page-title{
+        font-size:26px;
+    }
+    .rank-card{
+        padding:18px;
+    }
+}
+</style>
+</head>
+<body>
+<header class="header-bar">
+    <div class="logo-wrap" onclick="location.href='index.html'">
+        <img src="logo.png" alt="Logo" class="logo-img">
+        <div class="logo-text">NewEra</div>
+    </div>
+    <div class="header-right">
+        <div class="wallet-box" id="walletBtn">连接钱包</div>
+        <div class="menu-trigger" id="menuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</header>
+
+<div class="side-nav" id="sideMenu">
+    <h3>导航菜单</h3>
+    <div class="nav-item" onclick="location.href='index.html'">🏠首页</div>
+
+    <div class="nav-item" onclick="toggleFundMenu()">
+        🏛️基金会
+        <span id="fundArrow">▼</span>
+    </div>
+    <div class="sub-nav-wrap" id="fundSubMenu">
+        <div class="sub-nav-item" onclick="location.href='pool1.html'">一号基金会</div>
+        <div class="sub-nav-item" onclick="location.href='pool2.html'">二号基金会</div>
+        <div class="sub-nav-item" onclick="location.href='pool3.html'">三号基金会</div>
+    </div>
+
+    <div class="nav-item" onclick="location.href='pool5.html'">🚀公平发射</div>
+    <div class="nav-item" onclick="location.href='pool6.html'">🎁空投</div>
+    <div class="nav-item" onclick="location.href='pool7.html'">⚡闪兑交易</div>
+    <div class="nav-item" onclick="location.href='pool4.html'">📈质押生息</div>
+    <div class="nav-item" onclick="location.href='pool8.html'">📃 借贷合约</div>
+    <div class="nav-item" onclick="location.href='pool9.html'">🔥LP挖矿</div>
+    <div class="nav-item" onclick="location.href='rank.html'">🏆排行榜</div>
+    <div class="nav-item" onclick="location.href='user.html'">👤用户中心</div>
+    <div class="nav-item" onclick="location.href='rule.html'">📜代币发行与获取规则</div>
+    <div class="nav-item" onclick="location.href='share.html'">📤我的推广链接</div>
+</div>
+<div class="mask-overlay" id="maskOverlay"></div>
+
+<div class="main-wrap-rank">
+    <span class="back-link" onclick="history.back()">← 返回上一页</span>
+    <h1 class="page-title">
+        <span class="icon-emoji">🏆</span>
+        <span class="gradient-text">生态排行榜</span>
+    </h1>
+
+    <!-- 1.创始节点榜 -->
+    <div class="rank-card">
+        <h2>🔹创始节点排行榜</h2>
+        <div class="rank-table-wrap">
+            <table class="rank-table" id="tableFounder">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>钱包地址</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 2.共建节点榜 -->
+    <div class="rank-card">
+        <h2>🔹共建节点排行榜</h2>
+        <div class="rank-table-wrap">
+            <table class="rank-table" id="tablePartner">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>钱包地址</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--3.直推推广榜 -->
+    <div class="rank-card">
+        <h2>🔹直推推广排行榜</h2>
+        <div class="rank-table-wrap">
+            <table class="rank-table" id="tableRefer">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>钱包地址</th>
+                        <th>直推人数</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+//模拟假数据
+const mockFounder=[
+    {addr:"0x23a711111111111111111111111111111111aaaa",status:"已参与"},
+    {addr:"0x23a72222222222222222222222222222222bbbb",status:"已参与"},
+    {addr:"0x23a73333333333333333333333333333333cccc",status:"已参与"},
+    {addr:"0x23a74444444444444444444444444444444dddd",status:"空位"},
+];
+const mockPartner=[
+    {addr:"0x88b1aaaa111111111111111111111111111111",status:"已参与"},
+    {addr:"0x88b1bbbb222222222222222222222222222222",status:"已参与"},
+    {addr:"0x88b1cccc333333333333333333333333333333",status:"已参与"},
+    {addr:"0x888b1dddd444444444444444444444444444444",status:"空位"},
+];
+const mockRefer=[
+    {addr:"0x99cc0000000000000000000000000000000000",count:22},
+    {addr:"0x99cc1111111111111111111111111111111111",count:16},
+    {addr:"0x99cc2222222222222222222222222222222222",count:11},
+    {addr:"0x99cc3333333333333333333333333333333333",count:5},
+];
+
+function formatAddr(addr){
+    if(!addr) return "-";
+    return addr.slice(0,10)+"…"+addr.slice(-8);
+}
+function getRankClass(i){
+    if(i===0) return "rank-num no1";
+    if(i===1) return "rank-num no2";
+    if(i===2) return "rank-num no3";
+    return "rank-num";
+}
+
+function renderTable(tableId,list,renderRow){
+    const tb=document.querySelector("#"+tableId+" tbody");
+    tb.innerHTML="";
+    list.forEach((item,idx)=>{
+        const tr=document.createElement("tr");
+        //如果当前钱包地址和列表地址相同高亮
+        if(currentAccount && item.addr?.toLowerCase()===currentAccount.toLowerCase()){
+            tr.classList.add("my-row");
+        }
+        tr.innerHTML=renderRow(item,idx);
+        tb.appendChild(tr);
+    })
+}
+
+//渲染创始节点榜
+function renderFounder(){
+    renderTable("tableFounder",mockFounder,(item,idx)=>{
+        return `<td><span class="${getRankClass(idx)}">${idx+1}</span></td>
+        <td>${formatAddr(item.addr)}</td>
+        <td>${item.status}</td>`
+    })
+}
+//渲染共建节点榜
+function renderPartner(){
+    renderTable("tablePartner",mockPartner,(item,idx)=>{
+        return `<td><span class="${getRankClass(idx)}">${idx+1}</span></td>
+        <td>${formatAddr(item.addr)}</td>
+        <td>${item.status}</td>`
+    })
+}
+//渲染推广榜
+function renderRefer(){
+    renderTable("tableRefer",mockRefer,(item,idx)=>{
+        return `<td><span class="${getRankClass(idx)}">${idx+1}</span></td>
+        <td>${formatAddr(item.addr)}</td>
+        <td>${item.count}</td>`
+    })
+}
+
+function renderAllRank(){
+    renderFounder();
+    renderPartner();
+    renderRefer();
+}
+
+window.addEventListener("walletConnected",renderAllRank);
+window.addEventListener("walletDisconnected",renderAllRank);
+window.addEventListener("accountsChanged",renderAllRank);
+window.addEventListener("DOMContentLoaded",renderAllRank);
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>八号｜借贷合约 NewEra</title>
+<script src="https://cdn.jsdelivr.net/npm/web3@4.8.0/dist/web3.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header-bar">
+    <div class="logo-wrap" onclick="location.href='index.html'">
+        <img src="logo.png" alt="Logo" class="logo-img">
+        <div class="logo-text">NewEra</div>
+    </div>
+    <div class="header-right">
+        <div class="wallet-box" id="walletBtn">连接钱包</div>
+        <div class="menu-trigger" id="menuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</header>
+
+<div class="side-nav" id="sideMenu">
+    <h3>导航菜单</h3>
+    <div class="nav-item" onclick="location.href='index.html'">🏠首页</div>
+
+    <div class="nav-item" onclick="toggleFundMenu()">
+        🏛️基金会
+        <span id="fundArrow">▼</span>
+    </div>
+    <div class="sub-nav-wrap" id="fundSubMenu">
+        <div class="sub-nav-item" onclick="location.href='pool1.html'">一号基金会</div>
+        <div class="sub-nav-item" onclick="location.href='pool2.html'">二号基金会</div>
+        <div class="sub-nav-item" onclick="location.href='pool3.html'">三号基金会</div>
+    </div>
+
+    <div class="nav-item" onclick="location.href='pool5.html'">🚀公平发射</div>
+    <div class="nav-item" onclick="location.href='pool6.html'">🎁空投</div>
+    <div class="nav-item" onclick="location.href='pool7.html'">⚡闪兑交易</div>
+    <div class="nav-item" onclick="location.href='pool4.html'">📈质押生息</div>
+    <div class="nav-item" onclick="location.href='pool8.html'">📃 借贷合约</div>
+    <div class="nav-item" onclick="location.href='user.html'">👤用户中心</div>
+    <div class="nav-item" onclick="location.href='rule.html'">📜代币发行与获取规则</div>
+    <div class="nav-item" onclick="location.href='share.html'">📤我的推广链接</div>
+</div>
+<div class="mask-overlay" id="maskOverlay"></div>
+
+<div class="main-wrap">
+    <span class="back-link" onclick="history.back()">← 返回上一页</span>
+
+    <h1 class="page-title">八号｜借贷合约</h1>
+
+    <div class="pool-card">
+        <h3>借贷合约 · 业务说明</h3>
+        <ul class="rule-list">
+            <li>业务模式：质押NEW代币，借出USDT；也可存入USDT获取借贷利息</li>
+            <li>质押要求：质押NEW作为抵押物，按照抵押物估值比例借出资产</li>
+            <li>利息规则：借贷产生按日计息，到期需要归还本金+利息</li>
+            <li>清算机制：抵押物价格下跌到达清算线，抵押物将触发清算</li>
+            <li>风险提示：借贷存在清算风险，请充分评估风险后参与</li>
+        </ul>
+
+        <div class="buy-panel">
+            <div class="buy-info-row">
+                <span>业务类型</span>
+                <span>抵押借贷 / 放贷生息</span>
+            </div>
+            <div class="buy-info-row">
+                <span>计息方式</span>
+                <span>按日计息</span>
+            </div>
+            <div class="buy-info-row">
+                <span>风险提示</span>
+                <span>存在抵押物清算风险</span>
+            </div>
+
+            <button class="join-btn" onclick="alert('借贷合约功能待开发')">进入借贷合约</button>
+        </div>
+    </div>
+</div>
+
+<script src="common.js"></script>
+</body>
+</html>
